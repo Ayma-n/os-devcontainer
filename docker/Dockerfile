@@ -78,11 +78,12 @@ RUN apt-get -y install\
  time\
  traceroute
 
-# Install cs2670-specific stuff
+# Install cs169-specific stuff
 # (some of which may have already been installed)
 # Changes from the course-official installation
 # - python-minimal -> python2-minimal; error: no installation candidate
 # - added: - mesa-utils libgl1-mesa-glx grub-pc-bin; address weenix boot error
+RUN sudo apt-get update
 RUN sudo apt-get -y install\
     python2.7\
     python2-minimal\
@@ -98,7 +99,9 @@ RUN sudo apt-get -y install\
     gdb\
     mesa-utils\
     libgl1-mesa-glx\
-    grub-pc-bin
+    grub-pc-bin\
+    python3-pip
+RUN pip3 install pyelftools
 
 # install dependencies I personally like and use
 RUN sudo apt-get -y install\
