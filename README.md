@@ -36,5 +36,5 @@ your machine, and only use the container for compilation and testing.
 
 ## Acknowledgements
 
-This setup is forked from the development environment setup for CS300 students,
+This setup is forked from Vic (Shihang) Li's CS169 Docker setup which is forked from the development environment setup for CS300 students,
 which was forked from Harvard's CS61.
