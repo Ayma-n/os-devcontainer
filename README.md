@@ -24,7 +24,7 @@ Follow the steps below to connect to XQuartz:
 
 
 1. Goto XQuartz Settings -> Security and check “Allow connections from network clients”
-2. Add ```xhost +localhost``` to your ```.zshrc```
+2. Add ```xhost +localhost``` to your ```.zshrc``` or ```.bashrc```
 
 
 ## File sharing
