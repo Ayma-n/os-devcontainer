@@ -18,6 +18,15 @@ Once you're in the container, clone your Weenix repo in directory of your
 choosing. Run `make` to build Weenix, and you should be able to run Weenix
 with `./weenix`!
 
+## Setting up XQuartz
+
+Follow the steps below to connect to XQuartz:
+
+
+1. Goto XQuartz Settings -> Security and check “Allow connections from network clients”
+2. Add ```xhost +localhost``` to your ```.zshrc```
+
+
 ## File sharing
 
 The `home` directory in this folder is mounted to your Weenix container. Any
