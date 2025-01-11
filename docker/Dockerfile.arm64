@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM debian:12.2
 
 # set environment variables for tzdata
 ARG TZ=America/New_York
@@ -6,38 +6,37 @@ ENV TZ=${TZ}
 
 # include manual pages and documentation
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update &&\
-  yes | unminimize
+RUN apt-get update -y
 
 # copy new sources.list
-COPY --chown=root:root sources.list /etc/apt/sources.list
+# COPY --chown=root:root sources.list /etc/apt/sources.list
 
 # include multiarch support
 RUN apt-get -y install binfmt-support &&\
   dpkg --add-architecture amd64 &&\
-  apt-get update &&\
-  apt-get upgrade
+  apt-get update -y &&\
+  apt-get upgrade -y
 
 # install GCC-related packages
 RUN apt-get -y install\
  binutils-doc\
- cpp-doc\
- gcc-doc\
+ #cpp-doc\
+ #gcc-doc\
  g++\
  gdb\
- gdb-doc\
- glibc-doc\
+ #gdb-doc\
+ #glibc-doc\
  libblas-dev\
  liblapack-dev\
- liblapack-doc\
- libstdc++-10-doc\
- make\
- make-doc
+ #liblapack-doc\
+ #libstdc++-10-doc\
+ make
+ #make-doc
 
 # install clang-related packages
 RUN apt-get -y install\
  clang\
- clang-10-doc\
+ #clang-10-doc\
  lldb
 
 # install qemu for WeensyOS (sadly, this pulls in a lot of crap)
@@ -47,7 +46,7 @@ RUN apt-get -y install\
 # install programs used for system exploration
 RUN apt-get -y install\
  blktrace\
- linux-tools-generic\
+ #linux-tools-generic\
  strace\
  tcpdump
 
@@ -79,7 +78,7 @@ RUN apt-get -y install\
  inetutils-ping\
  iproute2\
  net-tools\
- netcat\
+ #netcat\
  telnet\
  time\
  traceroute
@@ -89,16 +88,28 @@ RUN apt-get -y install\
 # Changes from the course-official installation
 # - python-minimal -> python2-minimal; error: no installation candidate
 # - added: - mesa-utils libgl1-mesa-glx grub-pc-bin; address weenix boot error
+
+# Python 2 Stuff
+WORKDIR /tmp
+RUN wget https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz \
+    && tar -xvf Python-2.7.18.tgz \
+    && cd Python-2.7.18 \
+    && ./configure --enable-optimizations \
+    && make \
+    && make install \
+    && cd .. \
+    && rm -rf Python-2.7.18 Python-2.7.18.tgz
+
 RUN sudo apt-get update
 RUN sudo apt-get -y install\
-    python2.7\
-    python2-minimal\
+    #python2\
+    #python2-minimal\
     cscope\
     nasm\
     make\
     build-essential\
     grub2-common\
-    qemu\
+    #qemu\
     xorriso\
     genisoimage\
     xterm\
@@ -107,15 +118,16 @@ RUN sudo apt-get -y install\
     libgl1-mesa-glx\
     grub-pc-bin\
     python3-pip
-RUN pip3 install pyelftools
+RUN apt-get install python3-pyelftools
+#RUN pip3 install pyelftools
 
 # install GCC-related packages for amd64
 RUN apt-get -y install\
- g++-9-x86-64-linux-gnu\
+ g++-12-x86-64-linux-gnu\
  gdb-multiarch\
  libc6:amd64\
  libstdc++6:amd64\
- libasan5:amd64\
+ #libasan5:amd64\
  libtsan0:amd64\
  libubsan1:amd64\
  libreadline-dev:amd64\
@@ -124,13 +136,13 @@ RUN apt-get -y install\
  qemu-user
 
 # link x86-64 versions of common tools into /usr/x86_64-linux-gnu/bin
-RUN for i in addr2line c++filt cpp-9 g++-9 gcc-9 gcov-9 gcov-dump-9 gcov-tool-9 size strings; do \
+RUN for i in addr2line c++filt cpp-12 g++-12 gcc-12 gcov-12 gcov-dump-12 gcov-tool-12 size strings; do \
         ln -s /usr/bin/x86_64-linux-gnu-$i /usr/x86_64-linux-gnu/bin/$i; done && \
-  ln -s /usr/bin/x86_64-linux-gnu-cpp-9 /usr/x86_64-linux-gnu/bin/cpp && \
-  ln -s /usr/bin/x86_64-linux-gnu-g++-9 /usr/x86_64-linux-gnu/bin/c++ && \
-  ln -s /usr/bin/x86_64-linux-gnu-g++-9 /usr/x86_64-linux-gnu/bin/g++ && \
-  ln -s /usr/bin/x86_64-linux-gnu-gcc-9 /usr/x86_64-linux-gnu/bin/gcc && \
-  ln -s /usr/bin/x86_64-linux-gnu-gcc-9 /usr/x86_64-linux-gnu/bin/cc && \
+  ln -s /usr/bin/x86_64-linux-gnu-cpp-12 /usr/x86_64-linux-gnu/bin/cpp && \
+  ln -s /usr/bin/x86_64-linux-gnu-g++-12 /usr/x86_64-linux-gnu/bin/c++ && \
+  ln -s /usr/bin/x86_64-linux-gnu-g++-12 /usr/x86_64-linux-gnu/bin/g++ && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcc-12 /usr/x86_64-linux-gnu/bin/gcc && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcc-12 /usr/x86_64-linux-gnu/bin/cc && \
   ln -s /usr/bin/gdb-multiarch /usr/x86_64-linux-gnu/bin/gdb
 
 # install dependencies I personally like and use
