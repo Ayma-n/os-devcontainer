@@ -8,15 +8,15 @@ ENV TZ=${TZ}
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Update sources for packages to be installed, and upgrade existing packages
-RUN apt-get update -y
-RUN apt-get upgrade -y
+# RUN apt-get update -y
+# RUN apt-get upgrade -y
 
 # include multiarch support
-RUN apt-get -y install binfmt-support &&\
+RUN apt-get update && apt-get -y install binfmt-support &&\
   dpkg --add-architecture amd64
 
 # install all remaining packages for Weenix
-RUN apt-get -y install\
+RUN apt-get update && apt-get -y install\
     gcc-12-x86-64-linux-gnu\
     cscope\
     nasm\
@@ -29,12 +29,13 @@ RUN apt-get -y install\
     gdb-multiarch\
     mesa-utils\
     libgl1-mesa-glx\
+    grub-pc-bin\
     python3-pip\
     python3-pyelftools\
     qemu-system-x86\
     locales
   
-RUN apt-get -y install\
+RUN apt-get update && apt-get -y install\
   sudo\
   vim\
   git\
