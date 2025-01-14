@@ -29,23 +29,27 @@ RUN apt-get update && apt-get -y install\
     python3-pip\
     python3-pyelftools\
     qemu-system-x86\
-    locales
-  
+    cmake
+
+# install useful interactive programs
 RUN apt-get update && apt-get -y install\
   sudo\
   vim\
   git\
-  wget
+  wget\
+  nano
 
+# Symlink for gcc and gdb
 RUN ln -s /usr/bin/x86_64-linux-gnu-gcc-12 /usr/x86_64-linux-gnu/bin/gcc && \
   ln -s /usr/bin/x86_64-linux-gnu-gcc-12 /usr/x86_64-linux-gnu/bin/cc && \
   ln -s /usr/bin/gdb-multiarch /usr/x86_64-linux-gnu/bin/gdb
 
-# Download and extract Python 2 source
+# Necessary libraries for python2 to work properly
 RUN apt-get update && apt-get install -y \
     libncurses5-dev \
     libncursesw5-dev
 
+# Download and extract Python 2 source
 WORKDIR /tmp
 RUN wget https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz \
     && tar -xvf Python-2.7.18.tgz \
@@ -61,8 +65,9 @@ WORKDIR /
 RUN rm -rf /tmp/*
 
 # set up default locale
-RUN locale-gen en_US.UTF-8
-ENV LANG=en_US.UTF-8
+RUN apt-get update && apt-get install -y locales \
+    && locale-gen en_US.UTF-8 \
+    && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 
 # remove unneeded .deb files
 RUN rm -r /var/lib/apt/lists/*
