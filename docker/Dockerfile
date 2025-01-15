@@ -7,9 +7,13 @@ ENV TZ=${TZ}
 # include manual pages and documentation
 ARG DEBIAN_FRONTEND=noninteractive
 
+# include multiarch support
+RUN apt-get update && apt-get -y install binfmt-support &&\
+  dpkg --add-architecture amd64
+
 # install all remaining packages for Weenix
 RUN apt-get update && apt-get -y install\
-    gcc-12\
+    gcc-12-x86-64-linux-gnu\
     cscope\
     nasm\
     make\
@@ -34,6 +38,11 @@ RUN apt-get update && apt-get -y install\
   git\
   wget\
   nano
+
+# Symlink for gcc and gdb
+RUN ln -s /usr/bin/x86_64-linux-gnu-gcc-12 /usr/x86_64-linux-gnu/bin/gcc && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcc-12 /usr/x86_64-linux-gnu/bin/cc && \
+  ln -s /usr/bin/gdb-multiarch /usr/x86_64-linux-gnu/bin/gdb
 
 # Necessary libraries for python2 to work properly
 RUN apt-get update && apt-get install -y \
