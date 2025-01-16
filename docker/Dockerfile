@@ -22,6 +22,7 @@ RUN apt-get update && apt-get -y install\
     mesa-utils\
     libgl1-mesa-glx\
     grub-pc-bin\
+    python3\
     python3-pip\
     python3-pyelftools\
     qemu-system-x86\
@@ -35,22 +36,6 @@ RUN apt-get update && apt-get -y install\
   wget\
   nano
 
-# Necessary libraries for python2 to work properly
-RUN apt-get update && apt-get install -y \
-    libncurses5-dev \
-    libncursesw5-dev
-
-# Download and extract Python 2 source
-WORKDIR /tmp
-RUN wget https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz \
-    && tar -xvf Python-2.7.18.tgz \
-    && cd Python-2.7.18 \
-    && ./configure \
-    && make \
-    && make install \
-    && cd .. \
-    && rm -rf Python-2.7.18 Python-2.7.18.tgz
-  
 # Clean up temporary files
 WORKDIR /
 RUN rm -rf /tmp/*
