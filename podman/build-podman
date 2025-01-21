@@ -3,6 +3,19 @@
 cd `dirname $0`
 
 arch="`arch`"
+os="`uname`"
+disk_size=12
+
+# Check if the Podman machine already exists
+if podman machine list | grep -q "^podman-machine-default"; then
+    echo "Podman machine already exists. Jumping straight to building the image..."
+else
+    # Initializing Podman Machine
+    echo "Initializing Podman machine on $os ($arch)..."
+    podman machine init --disk-size="$disk_size"
+    podman machine start
+fi
+
 tag=
 platform=
 while test "$#" -ne 0; do
@@ -37,8 +50,7 @@ elif test -z "$tag"; then
 fi
 
 if test $platform = linux/arm64; then
-    exec docker build -t "$tag" -f Dockerfile.arm64 --platform linux/arm64 .
+    exec podman build -t "$tag" -f Dockerfile.arm64 --platform linux/arm64 .
 else
-    exec docker build -t "$tag" -f Dockerfile --platform linux/amd64 .
+    exec podman build -t "$tag" -f Dockerfile --platform linux/amd64 .
 fi
-
