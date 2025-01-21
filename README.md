@@ -8,10 +8,10 @@ on both x86 and arm machines.
 Follow the steps below to build and start your Weenix docker container:
 
 ```
-cd docker
-./build-docker
+cd podman
+./build-podman
 cd ..
-./run-docker
+./run-podman
 ```
 
 Once you're in the container, clone your Weenix repo in directory of your
