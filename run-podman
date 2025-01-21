@@ -18,7 +18,7 @@ while test "$#" -ne 0; do
             platform=linux/arm64
             shift
         else
-            echo "\`cs1670-run-docker --arm\` only works on ARM64 hosts" 1>&2
+            echo "\`cs1670-run-podman --arm\` only works on ARM64 hosts" 1>&2
             exit 1
         fi
     elif test "$1" = "-x" -o "$1" = "--x86-64" -o "$1" = "--x86_64" -o "$1" = "--amd64"; then
@@ -28,7 +28,7 @@ while test "$#" -ne 0; do
         if test "$arch" = "arm64" -o "$arch" = "aarch64"; then
             armtext=" [-a|--arm] [-x|--x86-64]"
         fi
-        echo "Usage: run-docker $armtext [-V|--verbose]" 1>&2
+        echo "Usage: run-podman $armtext [-V|--verbose]" 1>&2
         exit 1
     fi
 done
@@ -61,7 +61,7 @@ myfileid=`stat $statformatarg %d:%i "${BASH_SOURCE[0]}" 2>/dev/null`
 dir="`pwd`"
 subdir=""
 while test "$dir" != / -a "$dir" != ""; do
-    thisfileid=`stat $statformatarg %d:%i "$dir"/run-docker 2>/dev/null`
+    thisfileid=`stat $statformatarg %d:%i "$dir"/run-podman 2>/dev/null`
     if test -n "$thisfileid" -a "$thisfileid" = "$myfileid"; then
         maindir="$dir"
         break
@@ -83,15 +83,15 @@ if test -n "$SSH_AUTH_SOCK" -a "`uname`" = Darwin; then
 fi
 
 if test -n "$maindir"; then
-    existing_image="`docker ps -f status=running -f ancestor=$tag -f volume=/host_mnt"$maindir" --no-trunc --format "{{.CreatedAt}},{{.ID}}" | sort -r | head -n 1`"
+    existing_image="`podman ps -f status=running -f ancestor=$tag -f volume=/host_mnt"$maindir" --no-trunc --format "{{.CreatedAt}},{{.ID}}" | sort -r | head -n 1`"
     if test -n "$existing_image"; then
         created_at="`echo $existing_image | sed 's/,.*//'`"
         image="`echo $existing_image | sed 's/^.*,//'`"
         image12="`echo $image | head -c 12`"
         echo "* Using running container $image12, created $created_at" 1>&2
-        echo "- To start a new container, exit then \`cs1670-run-docker -f\`" 1>&2
-        echo "- To kill this container, exit then \`docker kill $image12\`" 1>&2
-        vexec docker exec -it$sshenvarg $image /bin/bash
+        echo "- To start a new container, exit then \`cs1670-run-podman -f\`" 1>&2
+        echo "- To kill this container, exit then \`podman kill $image12\`" 1>&2
+        vexec podman exec -it$sshenvarg $image /bin/bash
     fi
 fi
 
@@ -117,7 +117,7 @@ if test -z "$maindir"; then
     exit 1
 fi
 
-vexec docker run -it --rm\
+vexec podman run -it --rm\
     --name $container_name \
     --platform $platform \
     --privileged \
