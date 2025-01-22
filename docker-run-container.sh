@@ -18,7 +18,7 @@ while test "$#" -ne 0; do
             platform=linux/arm64
             shift
         else
-            echo "\`cs1670-run-docker --arm\` only works on ARM64 hosts" 1>&2
+            echo "\`docker-run-container.sh --arm\` only works on ARM64 hosts" 1>&2
             exit 1
         fi
     elif test "$1" = "-x" -o "$1" = "--x86-64" -o "$1" = "--x86_64" -o "$1" = "--amd64"; then
@@ -28,7 +28,7 @@ while test "$#" -ne 0; do
         if test "$arch" = "arm64" -o "$arch" = "aarch64"; then
             armtext=" [-a|--arm] [-x|--x86-64]"
         fi
-        echo "Usage: run-docker $armtext [-V|--verbose]" 1>&2
+        echo "Usage: docker-run-container.sh $armtext [-V|--verbose]" 1>&2
         exit 1
     fi
 done
@@ -61,7 +61,7 @@ myfileid=`stat $statformatarg %d:%i "${BASH_SOURCE[0]}" 2>/dev/null`
 dir="`pwd`"
 subdir=""
 while test "$dir" != / -a "$dir" != ""; do
-    thisfileid=`stat $statformatarg %d:%i "$dir"/run-docker 2>/dev/null`
+    thisfileid=`stat $statformatarg %d:%i "$dir"/docker-run-container.sh 2>/dev/null`
     if test -n "$thisfileid" -a "$thisfileid" = "$myfileid"; then
         maindir="$dir"
         break
@@ -89,7 +89,7 @@ if test -n "$maindir"; then
         image="`echo $existing_image | sed 's/^.*,//'`"
         image12="`echo $image | head -c 12`"
         echo "* Using running container $image12, created $created_at" 1>&2
-        echo "- To start a new container, exit then \`cs1670-run-docker -f\`" 1>&2
+        echo "- To start a new container, exit then \`docker-run-container.sh -f\`" 1>&2
         echo "- To kill this container, exit then \`docker kill $image12\`" 1>&2
         vexec docker exec -it$sshenvarg $image /bin/bash
     fi

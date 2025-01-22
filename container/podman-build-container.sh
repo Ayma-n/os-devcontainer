@@ -24,7 +24,7 @@ while test "$#" -ne 0; do
             platform=linux/arm64
             shift
         else
-            echo "\`build-podman --arm\` only works on ARM64 hosts" 1>&2
+            echo "\`podman-build-container.sh --arm\` only works on ARM64 hosts" 1>&2
             exit 1
         fi
     elif test "$1" = "-x" -o "$1" = "--x86-64" -o "$1" = "--x86_64" -o "$1" = "--amd64"; then
@@ -34,7 +34,7 @@ while test "$#" -ne 0; do
         if test "`arch`" = "arm64" -o "`arch`" = "aarch64"; then
             armtext=" [-a|--arm] [-x|--x86-64]"
         fi
-        echo "Usage: build-podman$armtext" 1>&2
+        echo "Usage: podman-build-container.sh$armtext" 1>&2
         exit 1
     fi
 done
