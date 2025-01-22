@@ -1,38 +1,7 @@
-# cs1670-docker
+# OS Development Container
+This repository contains a Docker/Podman setup for running Weenix, and other Operating Systems assignmnents, on your machine, for both ARM and x86 architectures.
 
-This repository contains a docker setup for running Weenix on your computer,
-on both x86 and arm machines.
-
-## Getting started
-
-Follow the steps below to build and start your Weenix docker container:
-
-```
-cd podman
-./build-podman
-cd ..
-./run-podman
-```
-
-Once you're in the container, clone your Weenix repo in directory of your
-choosing. Run `make` to build Weenix, and you should be able to run Weenix
-with `./weenix`!
-
-## Setting up XQuartz
-
-Follow the steps below to connect to XQuartz:
-
-
-1. Goto XQuartz Settings -> Security and check “Allow connections from network clients”
-2. Add ```xhost +localhost``` to your ```.zshrc``` or ```.bashrc```
-
-
-## File sharing
-
-The `home` directory in this folder is mounted to your Weenix container. Any
-changes made inside the container will be persisted after container exit.
-Similarly, you may edit Weenix outside the container, using a text editor on
-your machine, and only use the container for compilation and testing.
+To set it up, please follow instructions in the [Developing Locally Guide](https://github.com/brown-cs1690/handout/wiki/Developing-Locally-Guide) in the Weenix wiki. 
 
 ## Acknowledgements
 
