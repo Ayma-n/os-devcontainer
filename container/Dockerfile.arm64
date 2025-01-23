@@ -40,10 +40,11 @@ RUN apt-get update && apt-get -y install\
   wget\
   nano
 
-# Symlink for gcc and gdb
+# Symlink for gcc, gdb, and libstdc++ (used for reformat script)
 RUN ln -s /usr/bin/x86_64-linux-gnu-gcc-12 /usr/x86_64-linux-gnu/bin/gcc && \
   ln -s /usr/bin/x86_64-linux-gnu-gcc-12 /usr/x86_64-linux-gnu/bin/cc && \
-  ln -s /usr/bin/gdb-multiarch /usr/x86_64-linux-gnu/bin/gdb
+  ln -s /usr/bin/gdb-multiarch /usr/x86_64-linux-gnu/bin/gdb && \
+  ln -s /usr/x86_64-linux-gnu/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
 
 # Clean up temporary files
 WORKDIR /
